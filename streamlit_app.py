@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Apps Script URL
-SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyI3g5EvCN6cvz0q1_CaMDjR7GQw-yQO_Oh49pETUmk3pKfkjDlJBOV-mFAWtwRcMrd/exec"
+SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpFxeL0t37Rxc6bg-WNYgps9wsQcw7swuKupuhUXQCjKJX1U10TxdFB6J1wClDHxZh/exec"
 
 # Helper function to normalize phone numbers
 def normalize_phone(phone):
