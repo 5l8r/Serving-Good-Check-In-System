@@ -3,7 +3,7 @@ import requests
 import re  # Add this import for regular expressions
 
 # Apps Script URL
-SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8bTsJ1U1gbdi0Z_3tJVZWnhzOWDDnshfbtqHOLXqn_z4lpUrMH7YyzK20XnNYljLr/exec"
+SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxb2IX_9x4G8x3oD_zTVHv5KqOEX-futeKuZroAXHsUeqzaiTA0BQtocbrWUmluzYSD/exec"
 
 # Helper function to normalize phone numbers
 def normalize_phone(phone_or_email):
