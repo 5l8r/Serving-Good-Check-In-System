@@ -48,12 +48,15 @@ if st.button("Check In"):
     if not phone_or_email:
         st.error("Please enter your email or phone.")
     else:
+        st.info("Processing check-in...")  # Temporary info message
         normalized_phone = normalize_phone(phone_or_email)
         payload = {"input": normalized_phone}
         response = fetch_backend(SCRIPT_URL, method="POST", payload=payload)
+        st.write(response)  # Debugging: Show the response
         if "error" in response:
             st.error(response["error"])
         elif "success" in response:
             st.success(response["success"])
         else:
             st.info("Please wait for further instructions.")
+
