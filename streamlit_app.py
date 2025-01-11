@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Apps Script URL
-SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxOC36jPr33RvQL-5HE4mGpFHFFF9O1pBqpmLi4MpkgEhXrRfJFKkwenjpLg_rMZo-p/exec"
+SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyI3g5EvCN6cvz0q1_CaMDjR7GQw-yQO_Oh49pETUmk3pKfkjDlJBOV-mFAWtwRcMrd/exec"
 
 # Helper function to interact with the backend
 def fetch_backend(endpoint, method="GET", payload=None):
