@@ -4,6 +4,15 @@ import requests
 # Apps Script URL
 SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyI3g5EvCN6cvz0q1_CaMDjR7GQw-yQO_Oh49pETUmk3pKfkjDlJBOV-mFAWtwRcMrd/exec"
 
+# Helper function to normalize phone numbers
+def normalize_phone(phone):
+    phone = re.sub(r"[^\d]", "", phone)  # Remove non-numeric characters
+    if len(phone) == 10:
+        return f"+1{phone}"  # Add country code if missing
+    if len(phone) == 11 and phone.startswith("1"):
+        return f"+{phone}"  # Add '+' if missing
+    return phone
+
 # Helper function to interact with the backend
 def fetch_backend(endpoint, method="GET", payload=None):
     try:
@@ -18,46 +27,26 @@ def fetch_backend(endpoint, method="GET", payload=None):
 # Streamlit UI
 st.title("Non-Profit Check-In System")
 
-# Sign-Up Section
-st.header("Sign Up")
-with st.form("signup_form"):
-    first_name = st.text_input("First Name", placeholder="Enter your first name")
-    email = st.text_input("Email", placeholder="Enter your email")
-    phone = st.text_input("Phone", placeholder="Enter your phone number")
-    signup_button = st.form_submit_button("Sign Up")
-
-if signup_button:
-    if not first_name or not email or not phone:
-        st.error("All fields are required.")
-    else:
-        payload = {"signup": True, "firstName": first_name, "email": email, "phone": phone}
-        response = fetch_backend(SCRIPT_URL, method="POST", payload=payload)
-        if "error" in response:
-            st.error(response["error"])
-        else:
-            st.success(response.get("success", "Sign-up successful!"))
-
 # Market Info Section
 st.header("Market Info")
-market_info_button = st.button("Fetch Market Info")
-if market_info_button:
-    response = fetch_backend(f"{SCRIPT_URL}?marketInfo=true")
-    if "error" in response:
-        st.error(response["error"])
-    else:
-        st.markdown(f"**Next Market:** {response['date']} at {response['startTime']}")
-        st.markdown(f"**Check-In Window:** {response['checkInStart']} - {response['checkInEnd']}")
+market_response = fetch_backend(f"{SCRIPT_URL}?marketInfo=true")
+if "error" in market_response:
+    st.error(market_response["error"])
+else:
+    st.markdown(f"**Next Market:** {market_response['date']} at {market_response['startTime']}")
+    st.markdown(f"**Check-In Window:** {market_response['checkInStart']} - {market_response['checkInEnd']}")
 
 # Check-In Section
 st.header("Check In")
-check_in_input = st.text_input("Enter Email or Phone")
+phone_or_email = st.text_input("Enter Email or Phone", placeholder="Email or Phone Number")
 check_in_button = st.button("Check In")
 
 if check_in_button:
-    if not check_in_input:
+    if not phone_or_email:
         st.error("Please enter your email or phone.")
     else:
-        payload = {"input": check_in_input}
+        normalized_phone = normalize_phone(phone_or_email)
+        payload = {"input": normalized_phone}
         response = fetch_backend(SCRIPT_URL, method="POST", payload=payload)
         if "error" in response:
             st.error(response["error"])
