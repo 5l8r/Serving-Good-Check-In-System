@@ -27,6 +27,15 @@ def fetch_backend(endpoint, method="GET", payload=None):
     except requests.exceptions.RequestException as e:
         return {"error": f"Network error: {e}"}
 
+# Helper function to convert military time to 12-hour time
+def convert_to_12_hour(time_str):
+    if not time_str or ":" not in time_str:
+        return time_str  # Return as-is if invalid
+    hours, minutes = map(int, time_str.split(":"))
+    period = "AM" if hours < 12 else "PM"
+    hours = hours % 12 or 12  # Convert 0 to 12 for 12-hour time
+    return f"{hours}:{minutes:02d} {period}"
+
 # Streamlit UI
 st.title("Non-Profit Check-In System")
 
@@ -39,15 +48,20 @@ else:
     is_open = response.get("isOpen", False)
     next_market = response.get("nextMarket", {})
     
+    # Convert military times to 12-hour format
+    start_time = convert_to_12_hour(next_market.get("startTime", "TBD"))
+    check_in_start = convert_to_12_hour(next_market.get("checkInStart", "TBD"))
+    check_in_end = convert_to_12_hour(next_market.get("checkInEnd", "TBD"))
+
     # Display the next market
-    st.markdown(f"**Next Market:** {next_market.get('date', 'TBD')} at {next_market.get('startTime', 'TBD')}")
-    st.markdown(f"**Check-In Window:** {next_market.get('checkInStart', 'TBD')} - {next_market.get('checkInEnd', 'TBD')}")
+    st.markdown(f"**Next Market:** {next_market.get('date', 'TBD')} at {start_time}")
+    st.markdown(f"**Check-In Window:** {check_in_start} - {check_in_end}")
     
     # Show if check-in is open or closed
-    if is_open:
-        st.markdown("## Check In: **OPEN**", unsafe_allow_html=True, color="green")
-    else:
-        st.markdown("## Check In: **CLOSED**", unsafe_allow_html=True, color="red")
+if is_open:
+    st.markdown('<span style="color: green; font-size: 24px;">Check In: **OPEN**</span>', unsafe_allow_html=True)
+else:
+    st.markdown('<span style="color: red; font-size: 24px;">Check In: **CLOSED**</span>', unsafe_allow_html=True)
 
 
 # Check-In Section
