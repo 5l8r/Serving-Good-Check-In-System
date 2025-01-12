@@ -1,9 +1,9 @@
 import streamlit as st
 import requests
-import re  # Add this import for regular expressions
+import re  # For phone normalization
 
 # Apps Script URL
-SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwr0Ouehr69KXEYZQ_oJ6qLOhALKWMvvfdAj7GslSrrryTkVAPuelXZgjC1UDhKPYVe/exec"
+SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzb3BF8y7N8vx0S6Ey4YxymTBOW5JJTGay92wJlSb8VO6fWEBECFJ7kbff0v5KoPYPv/exec"
 
 # Helper function to normalize phone numbers
 def normalize_phone(phone):
@@ -30,7 +30,7 @@ def fetch_backend(endpoint, method="GET", payload=None):
 # Streamlit UI
 st.title("Non-Profit Check-In System")
 
-# Market Info Section (Automatically fetches on page load)
+# Market Info Section
 st.header("Market Info")
 response = fetch_backend(f"{SCRIPT_URL}?marketInfo=true")
 if "error" in response:
@@ -41,19 +41,18 @@ else:
 
 # Check-In Section
 st.header("Check In")
-phone = st.text_input("Enter Phone Number")  # Updated to only request phone numbers
+phone = st.text_input("Enter Phone Number")
 if st.button("Check In"):
     if not phone:
         st.error("Please enter your phone number.")
     else:
-        st.info("Processing check-in...")  # Temporary info message
+        st.info("Processing check-in...")
         normalized_phone = normalize_phone(phone)
         payload = {"input": normalized_phone}
         response = fetch_backend(SCRIPT_URL, method="POST", payload=payload)
-        st.write(response)  # Debugging: Show the response
         if "error" in response:
             st.error(response["error"])
         elif "success" in response:
             st.success(response["success"])
         else:
-            st.info("Please wait for further instructions.")
+            st.info("Unexpected response. Please try again.")
