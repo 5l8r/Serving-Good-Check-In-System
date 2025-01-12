@@ -57,11 +57,12 @@ else:
     st.markdown(f"**Next Market:** {next_market.get('date', 'TBD')} at {start_time}")
     st.markdown(f"**Check-In Window:** {check_in_start} - {check_in_end}")
     
-    # Show if check-in is open or closed
+# Show if check-in is open or closed
 if is_open:
-    st.markdown('<span style="color: green; font-size: 24px;">Check In: **OPEN**</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 24px;">Check In: <span style="color: green;">OPEN</span></span>', unsafe_allow_html=True)
 else:
-    st.markdown('<span style="color: red; font-size: 24px;">Check In: **CLOSED**</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 24px;">Check In: <span style="color: red;">CLOSED</span></span>', unsafe_allow_html=True)
+
 
 
 # Check-In Section
